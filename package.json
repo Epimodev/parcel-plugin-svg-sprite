@@ -1,0 +1,47 @@
+{
+  "name": "parcel-plugin-svg-sprite",
+  "version": "1.0.0",
+  "description": "Parcel plugin which generate a SVG sprite with <symbol> elements and inject it in built html",
+  "keywords": [
+    "svg",
+    "sprite",
+    "svg sprite",
+    "parcel",
+    "parcel plugin"
+  ],
+  "main": "src/index.js",
+  "author": "Frederic Godin",
+  "repository": "Epimodev/parcel-plugin-svg-sprite",
+  "license": "MIT",
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "lint": "eslint --ext .js ./src",
+    "check-format": "prettier --list-different 'src/**/*.js'",
+    "prepublish": "yarn lint && yarn check-format"
+  },
+  "peerDependencies": {
+    "parcel-bundler": "^1.9.7"
+  },
+  "devDependencies": {
+    "eslint": "^5.6.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "husky": "^1.0.0-rc.14",
+    "parcel-bundler": "^1.9.7",
+    "prettier": "^1.14.2"
+  },
+  "dependencies": {
+    "fs-extra": "^7.0.0",
+    "lodash": "^4.17.11",
+    "posthtml": "^0.11.3",
+    "svg-sprite": "^1.5.0",
+    "xxhash": "^0.2.4"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn lint && yarn check-format"
+    }
+  }
+}
