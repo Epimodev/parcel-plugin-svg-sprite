@@ -15,6 +15,21 @@ npm install -D parcel-plugin-svg-sprite
 ### Exemple
 Once the plugin is installed, you can import svg like this :
 
+In html file :
+```html
+...
+<body>
+  ...
+  <!-- relative path to the html file -->
+  <svg>
+    <use href="icons/checkmark.svg">
+  </svg>
+  ...
+</body>
+...
+```
+
+In javascript file :
 ```javascript
 import checkmark from './icons/checkmark.svg';
 
@@ -60,5 +75,5 @@ If you have to much icons, there is a risk to have a significantly bad impact on
 Like I said above, if you want to import a lot of svg files, or big illustrations, this plugin is not good for your case.
 You first render time can be too much delayed.
 
-### Improvment to make
+### Improvement to make
 - code splitting : this plugin can generate a svg by bundle, but I didn't find a way to inject them at runtime. For the moment, all svg of all bundles are injected at compilation time in HTML entry point.
