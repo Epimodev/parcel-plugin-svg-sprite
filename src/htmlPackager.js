@@ -58,16 +58,16 @@ function insertSvg(svgSprite, tree) {
 function replaceSvgHref(svgAssets, tree) {
   if (svgAssets.length > 0) {
     tree.match({ tag: 'svg' }, node => {
-      const firstChild = node.content[0];
-      if (firstChild.tag === 'use') {
-        const href = firstChild.attrs.href || firstChild.attrs['xlink:href'];
+      const svgUseTagElement = node.content.find(child => child.tag === 'use');
+      if (svgUseTagElement) {
+        const href = svgUseTagElement.attrs.href || svgUseTagElement.attrs['xlink:href'];
         if (href) {
           svgAssets.forEach(svgAsset => {
             const { hash, path: svgPath } = svgAsset.generated.svg;
             const svgName = path.basename(svgPath).slice(0, -4);
             if (href.indexOf(svgName) >= 0) {
-              delete firstChild.attrs.href;
-              firstChild.attrs['xlink:href'] = `#${hash}`;
+              delete svgUseTagElement.attrs.href;
+              svgUseTagElement.attrs['xlink:href'] = `#${hash}`;
             }
           });
         }
