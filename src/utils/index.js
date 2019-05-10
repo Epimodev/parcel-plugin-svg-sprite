@@ -1,5 +1,5 @@
 const path = require('path');
-const XXHash = require('xxhash');
+const XXHash = require('xxhashjs');
 const { createSprite } = require('./sprite');
 
 const STYLE_EXTENSIONS = ['.css', '.scss', '.sass', '.less', '.styl'];
@@ -11,8 +11,8 @@ const STYLE_EXTENSIONS = ['.css', '.scss', '.sass', '.less', '.styl'];
  */
 function createHash(content) {
   const buffer = Buffer.from(content, 'utf8');
-  const hash = XXHash.hash(buffer, 0xcafebabe);
-  return hash;
+  const hash = XXHash.h32(buffer, 0xcafebabe);
+  return hash.toNumber();
 }
 
 /**
