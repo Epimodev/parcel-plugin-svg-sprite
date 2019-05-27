@@ -26,12 +26,9 @@ class SvgAsset extends Asset {
   /**
    * @desc Generate asset of an svg file imported by js bundle
    *
-   * @return empty object if file path is not include or exluded
-   *         or the svg assets for SvgPackager wth a js asset which contain svg symbol id
+   * @return generated assets for packagers
    */
   async generate() {
-    const hash = await this.generateHash();
-
     // if path isn't include, we keep original RawAsset behavior
     if (this.useRawAssetsBehavior()) {
       // code copied from RawAsset to copy RawAsset behavior
@@ -44,6 +41,8 @@ class SvgAsset extends Asset {
         },
       ];
     }
+
+    const hash = await this.generateHash();
 
     return [
       {
