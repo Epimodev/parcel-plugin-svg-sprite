@@ -1,5 +1,6 @@
 const path = require('path');
 const XXHash = require('xxhashjs');
+const { includePaths, excludePaths } = require('./config');
 const { createSprite } = require('./sprite');
 
 const STYLE_EXTENSIONS = ['.css', '.scss', '.sass', '.less', '.styl'];
@@ -30,7 +31,17 @@ function importedByStyle(asset) {
   return false;
 }
 
+function isPathIncluded(filePath) {
+  // if includePaths is null, it means the option doesn't exist so by default we include all svg
+  const isIncluded = includePaths !== null ? includePaths.some(p => p === filePath) : true;
+  // if excludePaths is null, it means the option doesn't exist so by default we don't exclude any svg
+  const isExluded = excludePaths !== null ? excludePaths.some(p => p === filePath) : false;
+
+  return isIncluded && !isExluded;
+}
+
 module.exports = {
+  isPathIncluded,
   createHash,
   importedByStyle,
   createSprite,
