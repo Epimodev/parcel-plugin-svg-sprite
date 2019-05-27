@@ -32,9 +32,9 @@ function importedByStyle(asset) {
 }
 
 function isPathIncluded(filePath) {
-  // if includePaths is null, it means the option doesn't exist so by default we include all svg
+  // if includePaths is null, it means the option isn't set. By default we include all svg
   const isIncluded = includePaths !== null ? includePaths.some(p => p === filePath) : true;
-  // if excludePaths is null, it means the option doesn't exist so by default we don't exclude any svg
+  // if excludePaths is null, it means the option isn't set. By default we don't exclude any svg
   const isExluded = excludePaths !== null ? excludePaths.some(p => p === filePath) : false;
 
   return isIncluded && !isExluded;
