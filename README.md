@@ -3,7 +3,7 @@ A parcel plugin which create a svg sprite of imported svg and inject it in html 
 
 > warning : this plugin overwrite HTMLPackager, it can be in conflit with other plugin which also overwrite HTMLPackager.
 
-> Until version `1.1.2` files in an `assets` folder or subfolder wasn't injected in sprite to have the possibility to use svg files in css (css can't reference a svg symbol)
+> Until version `1.1.2` files in an `assets` folder or subfolder wasn't injected in sprite to have the possibility to use svg files in css (css can't reference a svg symbol).  
 > Since version `1.2.0` you can use options `include` and `exclude` to define path patterns you don't want to inject in sprite and import them as file url.
 > This can be usefull to import svg font in css or to use svg file in css background-image.
 
@@ -24,7 +24,7 @@ In html file :
 ...
 <body>
   ...
-  <!-- relative path to the html file -->
+  <!-- relative path from the html file -->
   <svg>
     <use href="icons/checkmark.svg">
   </svg>
@@ -57,13 +57,58 @@ const icon = (
 
 When you import a svg, you get the id of the symbol generated in built sprite. This is why you can use it as `xlink:href` attribute.
 
+#### HTML input example:
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app"></div>
+  <script src="app.tsx"></script>
+</body>
+</html>
+```
+
+#### Generated HTML expected
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <!-- Begin of svg sprite wrapper -->
+  <svg width="0" height="0" style="position:absolute">
+    <symbol id="generated_symbol_id_1" xmlns="http://www.w3.org/2000/svg">
+      <!-- first imported svg file content -->
+    </symbol>
+    <symbol id="generated_symbol_id_2" xmlns="http://www.w3.org/2000/svg">
+      <!-- second imported svg file content -->
+    </symbol>
+    ...
+  </svg>
+  <!-- End of svg sprite wrapper -->
+  <div id="app"></div>
+  <script src="app.tsx"></script>
+</body>
+</html>
+```
+
 ### Options :
 
-This plugin has a 2 options to give the possibility to handle specific cases.  
+This plugin has 2 options to give the possibility to handle specific cases.  
 Those options can be set only in `package.json` in the field `svgSpriteOptions`.
 
 **exclude** `string[]`  
-List of glob patterns which should not be included in svg sprite and imported as file url which Parcel default behavior.  
+List of glob patterns which should not be included in svg sprite and should be imported as file url (like Parcel's default behavior).  
 This can be usefull if you need to import file in css (for font or background-image).  
 example (to avoid inject files from assets folder in svg sprite):
 ```json
