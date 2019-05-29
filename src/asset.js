@@ -1,23 +1,48 @@
 const { Asset } = require('parcel-bundler');
-const { createHash } = require('./utils');
+const urlJoin = require('parcel-bundler/lib/utils/urlJoin');
+const md5 = require('parcel-bundler/lib/utils/md5');
+const { isPathIncluded, createHash } = require('./utils');
 
 class SvgAsset extends Asset {
   /**
+   * @desc check if we use raw asset behavior or svg sprite behavior
+   */
+  useRawAssetsBehavior() {
+    return !isPathIncluded(this.name);
+  }
+
+  /**
+   * @desc load asset contents
+   */
+  // eslint-disable-next-line consistent-return
+  load() {
+    if (this.useRawAssetsBehavior()) {
+      // we do nothing because it will be copied by the RawPackager directly.
+    } else {
+      return super.load();
+    }
+  }
+
+  /**
    * @desc Generate asset of an svg file imported by js bundle
-   * We consider that files from an `assets` folder has to be imported has RawAssets
    *
-   * @return empty object if file is in an `assets` folder
-   *         or the svg assets for SvgPackager wth a js asset which contain svg symbol id
+   * @return generated assets for packagers
    */
   async generate() {
-    // this is used to keep original behavior with files imported by css for font
-    // here `parentBundle` is null so we can't know if svg is imported by a css file
-    const isFromAssets = this.name.includes('/assets/');
-    const hash = await this.generateHash();
-
-    if (isFromAssets) {
-      return {};
+    // if path isn't include, we keep original RawAsset behavior
+    if (this.useRawAssetsBehavior()) {
+      // code copied from RawAsset to copy RawAsset behavior
+      // https://github.com/parcel-bundler/parcel/blob/master/packages/core/parcel-bundler/src/assets/RawAsset.js
+      const pathToAsset = urlJoin(this.options.publicURL, this.generateBundleName());
+      return [
+        {
+          type: 'js',
+          value: `module.exports=${JSON.stringify(pathToAsset)};`,
+        },
+      ];
     }
+
+    const hash = await this.generateHash();
 
     return [
       {
@@ -30,7 +55,7 @@ class SvgAsset extends Asset {
       },
       {
         type: 'js',
-        value: `module.exports = '#${hash}'`,
+        value: `module.exports='#${hash}'`,
       },
     ];
   }
@@ -40,7 +65,11 @@ class SvgAsset extends Asset {
    * @return {string}
    */
   async generateHash() {
-    return createHash(this.contents).toString();
+    if (this.content) {
+      return createHash(this.contents).toString();
+    }
+
+    return md5.file(this.name);
   }
 }
 

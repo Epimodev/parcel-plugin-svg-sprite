@@ -31,18 +31,24 @@ class SvgPackager extends Packager {
 
   /**
    * @desc copy svg file like RawAsset does
+   * we can let parcel copy file by set the static method `shouldAddAsset` return false
+   * but it will create a svg file and js file even for files which are injected in sprite
+   * whereas we want to copy file only if it isn't injected in svg sprite
    * @param {Asset} asset - svg asset
    */
   async copyToDist(asset) {
     const content = await fse.readFile(asset.name);
+    // generated js has format: `module.exports="/relativePath";`
+    const relativePath = asset.generated.js.split('"')[1].substr(1);
+    const filePath = path.resolve(this.bundler.options.outDir, relativePath);
 
     // Create sub-directories if needed
-    if (this.bundle.name.includes(path.sep)) {
-      await fse.mkdirp(path.dirname(this.bundle.name));
+    if (filePath.includes(path.sep)) {
+      await fse.mkdirp(path.dirname(filePath));
     }
 
     this.size = content.length;
-    await fse.writeFile(this.bundle.name, content);
+    await fse.writeFile(filePath, content);
   }
 
   /**
@@ -85,7 +91,7 @@ class SvgPackager extends Packager {
    */
   getSize() {
     if (this.size !== undefined) {
-      // if assets files are loaded from a style file
+      // if assets files are loaded as RawAsset
       return this.size;
     }
     if (this.dest.closed) {
