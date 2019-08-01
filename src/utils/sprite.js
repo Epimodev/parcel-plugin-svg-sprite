@@ -46,6 +46,11 @@ function createConfig(svgList) {
         inline: true,
       },
     },
+    svg: {
+      rootAttributes: {
+        'aria-hidden': 'true',
+      },
+    },
   };
 }
 
