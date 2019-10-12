@@ -1,7 +1,7 @@
 const { Asset } = require('parcel-bundler');
 const urlJoin = require('parcel-bundler/lib/utils/urlJoin');
 const md5 = require('parcel-bundler/lib/utils/md5');
-const { isPathIncluded, createHash } = require('./utils');
+const { getSymbolId, isPathIncluded, createHash } = require('./utils');
 
 class SvgAsset extends Asset {
   /**
@@ -43,11 +43,13 @@ class SvgAsset extends Asset {
     }
 
     const hash = await this.generateHash();
+    const id = getSymbolId(this.name, this.contents, hash);
 
     return [
       {
         type: 'svg',
         value: {
+          id,
           hash,
           path: this.name,
           content: this.contents,
@@ -55,7 +57,7 @@ class SvgAsset extends Asset {
       },
       {
         type: 'js',
-        value: `module.exports='#${hash}'`,
+        value: `module.exports='#${id}'`,
       },
     ];
   }

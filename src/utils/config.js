@@ -23,7 +23,8 @@ function getOptions() {
     packageContent && packageContent.svgSpriteOptions ? packageContent.svgSpriteOptions : {};
 
   const config = { ...packageConfig, ...jsConfig };
-  const { include = null, exclude = null } = config;
+  const defaultGetSymbolId = (filePath, fileContent, fileHash) => fileHash;
+  const { include = null, exclude = null, getSymbolId = defaultGetSymbolId } = config;
 
   // check options
   if (include && !isStringArray(include)) {
@@ -33,7 +34,7 @@ function getOptions() {
     throw new Error('parcel-plugin-svg-sprite Error: `exclude` option must be an array of string');
   }
 
-  return { include, exclude };
+  return { include, exclude, getSymbolId };
 }
 
 /**
@@ -115,11 +116,13 @@ function isStringArray(value) {
 }
 
 const config = getOptions();
+const { getSymbolId } = config;
 const excludePaths = getExcludePaths(config);
 const includePaths = getIncludePaths(config, excludePaths);
 
 module.exports = {
   config,
+  getSymbolId,
   includePaths,
   excludePaths,
 };

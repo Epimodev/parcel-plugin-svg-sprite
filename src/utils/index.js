@@ -1,6 +1,6 @@
 const path = require('path');
 const XXHash = require('xxhashjs');
-const { includePaths, excludePaths } = require('./config');
+const { includePaths, excludePaths, getSymbolId } = require('./config');
 const { createSprite } = require('./sprite');
 
 const STYLE_EXTENSIONS = ['.css', '.scss', '.sass', '.less', '.styl'];
@@ -41,6 +41,7 @@ function isPathIncluded(filePath) {
 }
 
 module.exports = {
+  getSymbolId,
   isPathIncluded,
   createHash,
   importedByStyle,
