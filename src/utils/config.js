@@ -8,23 +8,23 @@ const glob = require('glob');
  */
 function getOptions() {
   const configPath = path.resolve('svgSprite.config.js');
-  let jsConfig;
+  let jsOptions;
   try {
     // eslint-disable-next-line import/no-dynamic-require, global-require
-    jsConfig = require(configPath);
+    jsOptions = require(configPath);
   } catch (e) {
-    // if `svgSprite.config.js` the config is empty
-    jsConfig = {};
+    // if `svgSprite.config.js` doesn't exists
+    jsOptions = {};
   }
 
   const packagePath = path.resolve('package.json');
   const packageContent = fse.readJsonSync(packagePath);
-  const packageConfig =
+  const packageOptions =
     packageContent && packageContent.svgSpriteOptions ? packageContent.svgSpriteOptions : {};
 
-  const config = { ...packageConfig, ...jsConfig };
+  const options = { ...packageOptions, ...jsOptions };
   const defaultGetSymbolId = (filePath, fileContent, fileHash) => fileHash;
-  const { include = null, exclude = null, getSymbolId = defaultGetSymbolId } = config;
+  const { include = null, exclude = null, getSymbolId = defaultGetSymbolId } = options;
 
   // check options
   if (include && !isStringArray(include)) {
