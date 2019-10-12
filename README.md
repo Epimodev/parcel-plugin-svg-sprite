@@ -105,7 +105,9 @@ When you import a svg, you get the id of the symbol generated in built sprite. T
 ### Options :
 
 This plugin has 2 options to give the possibility to handle specific cases.  
-Those options can be set only in `package.json` in the field `svgSpriteOptions`.
+There are 2 ways to set plugin options:
+- add an object `svgSpriteOptions` in `package.json` of the project
+- create `svgSprite.config.js` file which export an object at the root of your project.
 
 **exclude** `string[]`  
 List of glob patterns which should not be included in svg sprite and should be imported as file url (like Parcel's default behavior).  
