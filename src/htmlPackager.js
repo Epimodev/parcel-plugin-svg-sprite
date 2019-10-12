@@ -20,8 +20,8 @@ function svgAlreadyExists(svgList, svgItem) {
  */
 async function createSvgSprite(assets) {
   const svgList = assets.reduce((acc, asset) => {
-    const { hash, path: svgPath, content } = asset.generated.svg;
-    const svgItem = { hash, path: svgPath, content };
+    const { id, hash, path: svgPath, content } = asset.generated.svg;
+    const svgItem = { id, hash, path: svgPath, content };
     const alreadyExists = svgAlreadyExists(acc, svgItem);
 
     if (!alreadyExists) {
@@ -63,11 +63,11 @@ function replaceSvgHref(svgAssets, tree) {
         const href = svgUseTagElement.attrs.href || svgUseTagElement.attrs['xlink:href'];
         if (href) {
           svgAssets.forEach(svgAsset => {
-            const { hash, path: svgPath } = svgAsset.generated.svg;
+            const { id, path: svgPath } = svgAsset.generated.svg;
             const svgName = path.basename(svgPath).slice(0, -4);
             if (href.indexOf(svgName) >= 0) {
               delete svgUseTagElement.attrs.href;
-              svgUseTagElement.attrs['xlink:href'] = `#${hash}`;
+              svgUseTagElement.attrs['xlink:href'] = `#${id}`;
             }
           });
         }

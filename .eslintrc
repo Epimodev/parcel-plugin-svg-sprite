@@ -6,6 +6,8 @@
     "arrow-parens": ["error", "as-needed"],
     "no-use-before-define": "off",
     "semi": "off",
-    "max-len": "off"
+    "max-len": "off",
+    "operator-linebreak": "off",
+    "object-curly-newline": "off"
   }
 }

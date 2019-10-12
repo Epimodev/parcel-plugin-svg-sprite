@@ -105,7 +105,11 @@ When you import a svg, you get the id of the symbol generated in built sprite. T
 ### Options :
 
 This plugin has 2 options to give the possibility to handle specific cases.  
-Those options can be set only in `package.json` in the field `svgSpriteOptions`.
+There are 2 ways to set plugin options:
+- add an object `svgSpriteOptions` in `package.json` of the project
+- create `svgSprite.config.js` file which export an object at the root of your project.
+
+> options set in `svgSprite.config.js` overwrite options set in `package.json`
 
 **exclude** `string[]`  
 List of glob patterns which should not be included in svg sprite and should be imported as file url (like Parcel's default behavior).  
@@ -132,6 +136,20 @@ example:
 "svgSpriteOptions": {
   "include": ["src/**/*"]
 }
+```
+
+**getSymbolId** `(filePath, fileContent, fileHash) => string` (only in svgSprite.config.js)  
+Give the possibilty to define how svg symbol ids are generated. By default the svg id will be the hash of file content.
+exemple:
+```js
+// svgSprite.config.js
+const path = require('path');
+
+module.exports = {
+  getSymbolId: (filePath, fileContent, fileHash) => {
+    return path.basename(filePath, '.svg');
+  },
+};
 ```
 
 ### Advantages :

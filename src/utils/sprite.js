@@ -5,6 +5,7 @@ const findLast = require('lodash/findLast');
  * @desc Create id generator function to inject id from svgList in svg sprite
  * @param {object[]} svgList - list of svg info for sprite creation
  * @param {string} svgList[].path
+ * @param {string} svgList[].id
  * @param {string} svgList[].hash
  * @param {string} svgList[].content
  * @return {createIdGenerator~generator}
@@ -19,7 +20,7 @@ function createIdGenerator(svgList) {
   function generator(defaultId, file) {
     const svgItem = findLast(svgList, item => item.path === file.path);
     if (!svgItem) throw new Error(`File ${file.path} not found in svg list during id generation`);
-    return svgItem.hash;
+    return svgItem.id;
   }
 
   return generator;

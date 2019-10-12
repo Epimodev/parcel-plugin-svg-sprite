@@ -3,38 +3,38 @@ const fse = require('fs-extra');
 const glob = require('glob');
 
 /**
- * @desc Create a svg sprite with <symbol> elements
- * @param {object[]} svgList - list of svg info for sprite creation
- * @param {string} svgList[].path
- * @param {string} svgList[].hash
- * @param {string} svgList[].content
- * @return {Promise} promise with svg sprite string
+ * @desc get plugin options from package.json or svgSprite.config.js
+ * @return {object} plugin options
  */
-function getConfig() {
-  const packagePath = path.resolve('package.json');
-  const packageContent = fse.readJsonSync(packagePath);
-  if (packageContent && packageContent.svgSpriteOptions) {
-    const { include, exclude } = packageContent.svgSpriteOptions;
-
-    // check options
-    if (include && !isStringArray(include)) {
-      throw new Error('include option must be an array of string');
-    }
-    if (exclude && !isStringArray(exclude)) {
-      throw new Error('include option must be an array of string');
-    }
-
-    return {
-      include: include || null,
-      exclude: exclude || null,
-    };
+function getOptions() {
+  const configPath = path.resolve('svgSprite.config.js');
+  let jsOptions;
+  try {
+    // eslint-disable-next-line import/no-dynamic-require, global-require
+    jsOptions = require(configPath);
+  } catch (e) {
+    // if `svgSprite.config.js` doesn't exists
+    jsOptions = {};
   }
 
-  // if option doesn't exist, we set default options
-  return {
-    include: null,
-    exclude: null,
-  };
+  const packagePath = path.resolve('package.json');
+  const packageContent = fse.readJsonSync(packagePath);
+  const packageOptions =
+    packageContent && packageContent.svgSpriteOptions ? packageContent.svgSpriteOptions : {};
+
+  const options = { ...packageOptions, ...jsOptions };
+  const defaultGetSymbolId = (filePath, fileContent, fileHash) => fileHash;
+  const { include = null, exclude = null, getSymbolId = defaultGetSymbolId } = options;
+
+  // check options
+  if (include && !isStringArray(include)) {
+    throw new Error('parcel-plugin-svg-sprite Error: `include` option must be an array of string');
+  }
+  if (exclude && !isStringArray(exclude)) {
+    throw new Error('parcel-plugin-svg-sprite Error: `exclude` option must be an array of string');
+  }
+
+  return { include, exclude, getSymbolId };
 }
 
 /**
@@ -115,12 +115,14 @@ function isStringArray(value) {
   return false;
 }
 
-const config = getConfig();
+const config = getOptions();
+const { getSymbolId } = config;
 const excludePaths = getExcludePaths(config);
 const includePaths = getIncludePaths(config, excludePaths);
 
 module.exports = {
   config,
+  getSymbolId,
   includePaths,
   excludePaths,
 };
