@@ -76,8 +76,8 @@ class SvgPackager extends Packager {
     if (!asset.generated.svg) {
       await this.copyToDist(asset);
     } else {
-      const { hash, path: svgPath, content } = asset.generated.svg;
-      const svgItem = { hash, path: svgPath, content };
+      const { hash, id, path: svgPath, content } = asset.generated.svg;
+      const svgItem = { hash, id, path: svgPath, content };
       const alreadyExists = this.svgAlreadyExists(svgItem);
 
       if (!alreadyExists) {
