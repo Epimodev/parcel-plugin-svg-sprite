@@ -96,6 +96,7 @@ function compileSprite(spriter) {
  * @param {object[]} svgList - list of svg info for sprite creation
  * @param {string} svgList[].path
  * @param {string} svgList[].hash
+ * @param {string} svgList[].id
  * @param {string} svgList[].content
  * @return {Promise} promise with svg sprite string
  */
