@@ -1,0 +1,22 @@
+{
+  "name": "parcel-transformer-svg-sprite",
+  "version": "2.0.0",
+  "description": "Parcel svg transformer which generate a SVG symbol and generate a JS chunk exporting symbol id",
+  "keywords": [
+    "svg",
+    "sprite",
+    "svg sprite",
+    "parcel",
+    "parcel plugin"
+  ],
+  "main": "src/index.js",
+  "license": "MIT",
+  "engines": {
+    "parcel": "^2.0.1"
+  },
+  "dependencies": {
+    "@parcel/hash": "^2.0.1",
+    "@parcel/plugin": "^2.0.1",
+    "svgo": "^2.8.0"
+  }
+}

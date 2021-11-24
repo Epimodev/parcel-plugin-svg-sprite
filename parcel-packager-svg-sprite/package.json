@@ -1,0 +1,22 @@
+{
+  "name": "parcel-packager-svg-sprite",
+  "version": "2.0.0",
+  "description": "Parcel html packager which generate a SVG sprite and inject it in built html",
+  "keywords": [
+    "svg",
+    "sprite",
+    "svg sprite",
+    "parcel",
+    "parcel plugin"
+  ],
+  "main": "src/index.js",
+  "license": "MIT",
+  "engines": {
+    "parcel": "^2.0.1"
+  },
+  "dependencies": {
+    "@parcel/plugin": "^2.0.1",
+    "parcel": "^2.0.1",
+    "posthtml": "^0.16.5"
+  }
+}
