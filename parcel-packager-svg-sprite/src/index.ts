@@ -34,7 +34,7 @@ export default new Packager({
         asset => asset.meta.type === "svg-sprite",
       )
       if (svgAsset) {
-        svgBundles[`/${bundle.name}`] = `#${svgAsset.meta.svgId}`
+        svgBundles[`${bundle.name}`] = `#${svgAsset.meta.svgId}`
       }
 
       // Fill svgSynbols which is used to generate svg sprite
@@ -66,9 +66,10 @@ export default new Packager({
           child => typeof child !== "string" && child.tag === "use",
         )
         if (svgUseTagElement) {
+          const hrefString = svgUseTagElement.attrs.href.indexOf('/') == 0 ? href.substring(1) : href;
           const href: string | undefined =
             // @ts-expect-error
-            svgUseTagElement.attrs.href ||
+            hrefString ||
             // @ts-expect-error
             svgUseTagElement.attrs["xlink:href"]
 
