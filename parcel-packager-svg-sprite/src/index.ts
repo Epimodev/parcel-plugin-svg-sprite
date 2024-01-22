@@ -66,9 +66,10 @@ export default new Packager({
           child => typeof child !== "string" && child.tag === "use",
         )
         if (svgUseTagElement) {
-          const hrefString = svgUseTagElement.attrs.href.indexOf('/') == 0 ? href.substring(1) : href;
+          // @ts-expect-error
+          const hrefAttr: string = svgUseTagElement.attrs.href
+          const hrefString = hrefAttr.indexOf('/') == 0 ? hrefAttr.substring(1) : hrefAttr;
           const href: string | undefined =
-            // @ts-expect-error
             hrefString ||
             // @ts-expect-error
             svgUseTagElement.attrs["xlink:href"]

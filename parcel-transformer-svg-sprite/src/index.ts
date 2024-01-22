@@ -23,7 +23,6 @@ export default new Transformer({
 
   async transform({ asset, config }) {
     if (asset.type === "svg") {
-      // @ts-expect-error
       const svgoConfig = config.svgo
 
       const svgCode = await asset.getCode()
